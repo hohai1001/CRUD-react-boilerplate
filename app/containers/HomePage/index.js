@@ -57,7 +57,7 @@ export function HomePage(props) {
   const classes = useStyles();
   const {
     data,
-    statusFlags: { isLoadMore, isShowLoadMore, isCallApi },
+    statusFlags: { isLoadMore, isShowLoadMore, isCallApi, isLoading },
     linkParams: { limit, offset },
     triggerGetListBook,
   } = props;
@@ -79,21 +79,21 @@ export function HomePage(props) {
   };
 
   return (
-    <div>
+    <Box p={4}>
       <Helmet>
         <title>HomePage</title>
         <meta name="description" content="Description of HomePage" />
       </Helmet>
       {/* <FormattedMessage {...messages.header} /> */}
 
-      <Typography variant="h6" paragraph align="center">
-        HomePage
+      <Typography variant="h5" paragraph align="center">
+        <b>HomePage</b>
       </Typography>
 
-      <Grid item xs={12} md={6} lg={4}>
+      <Grid item xs={12} sm={8} md={6} lg={5}>
         <TextField
           value={value}
-          // inputRef={value}
+          // inputRef={e => console.log(e)}
           onChange={() => hanldGetValue()}
           fullWidth
           size="small"
@@ -117,17 +117,23 @@ export function HomePage(props) {
             <Table size="small">
               <TableHead className={classes.header}>
                 <TableRow>
-                  <TableCell>NO</TableCell>
-                  <TableCell>Title</TableCell>
-                  <TableCell>Body</TableCell>
+                  <TableCell width="5%">
+                    <b>NO</b>
+                  </TableCell>
+                  <TableCell width="30%">
+                    <b>Title</b>
+                  </TableCell>
+                  <TableCell width="65%">
+                    <b>Body</b>
+                  </TableCell>
                 </TableRow>
               </TableHead>
               <TableBody>
                 {_map(data, (item, idx) => (
                   <TableRow key={idx.toString()}>
-                    <TableCell>{item.no}</TableCell>
-                    <TableCell>{item.title}</TableCell>
-                    <TableCell>{item.body}</TableCell>
+                    <TableCell width="5%">{item.no}</TableCell>
+                    <TableCell width="30%">{item.title}</TableCell>
+                    <TableCell width="65%">{item.body}</TableCell>
                   </TableRow>
                 ))}
               </TableBody>
@@ -136,11 +142,20 @@ export function HomePage(props) {
           {isShowLoadMore ? (
             <Box my={3} textAlign="center">
               <Button
+                color="secondary"
+                disabled={isLoading}
                 size="small"
                 variant="contained"
-                color="primary"
                 onClick={() => triggerGetListBook(limit, offset)}
               >
+                {isLoading && (
+                  <>
+                    <CircularProgress
+                      style={{ width: '17px', height: '17px' }}
+                    />
+                    &nbsp;
+                  </>
+                )}
                 Xem thêm
               </Button>
             </Box>
@@ -159,7 +174,7 @@ export function HomePage(props) {
         </Box>
       )}
       <br />
-    </div>
+    </Box>
   );
 }
 
