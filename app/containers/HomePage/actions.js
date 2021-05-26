@@ -19,10 +19,11 @@ export function getListBook(limit, offset, text) {
   };
 }
 
-export function getListBookSuccess(data) {
+export function getListBookSuccess(data, sizeData) {
   return {
     type: GET_LIST_BOOK_SUCCESS,
     data,
+    sizeData,
   };
 }
 

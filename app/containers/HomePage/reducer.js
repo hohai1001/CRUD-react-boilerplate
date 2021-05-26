@@ -20,6 +20,7 @@ export const initialState = {
     limit: 15,
     offset: 0,
     keySearch: '',
+    sizeData: 0,
   },
   statusFlags: {
     isLoading: false,
@@ -37,6 +38,9 @@ const homePageReducer = (state = initialState, action) =>
       case GET_LIST_BOOK:
         draft.statusFlags.isLoading = true;
         draft.statusFlags.isCallApi = true;
+        if (action.offset === 0) {
+          draft.linkParams.offset = initialState.linkParams.offset;
+        }
         break;
       case GET_LIST_BOOK_SUCCESS: {
         draft.statusFlags.isLoading = false;
@@ -47,6 +51,8 @@ const homePageReducer = (state = initialState, action) =>
           _size(action.data) > 0
             ? state.linkParams.offset + _size(action.data)
             : 0;
+
+        draft.linkParams.sizeData = action.sizeData;
         const listData = [];
         if (!_isEmpty(action.data) && _size(action.data) > 0) {
           _forEach(action.data, item => {
@@ -63,6 +69,8 @@ const homePageReducer = (state = initialState, action) =>
 
       case GET_LIST_BOOK_FAIL:
         draft.statusFlags.isGetListFail = true;
+        draft.statusFlags.isLoadMore = false;
+        draft.linkParams.offset = initialState.linkParams.offset;
         break;
     }
   });

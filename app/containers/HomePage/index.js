@@ -31,6 +31,7 @@ import SearchIcon from '@material-ui/icons/Search';
 import makeStyles from '@material-ui/core/styles/makeStyles';
 
 import _map from 'lodash/map';
+// import _filter from 'lodash/filter';
 
 import { useInjectSaga } from 'utils/injectSaga';
 import { useInjectReducer } from 'utils/injectReducer';
@@ -58,7 +59,7 @@ export function HomePage(props) {
   const {
     data,
     statusFlags: { isLoadMore, isShowLoadMore, isCallApi, isLoading },
-    linkParams: { limit, offset },
+    linkParams: { limit, offset, sizeData },
     triggerGetListBook,
   } = props;
 
@@ -68,15 +69,15 @@ export function HomePage(props) {
     }
   }, [isCallApi]);
 
-  const [value, setValue] = React.useState('');
+  const [keySearch, setKeySearch] = React.useState('');
 
   const hanldGetValue = event => {
-    setValue(event);
+    setKeySearch(event.target.value);
   };
 
-  const handleSearch = val => {
-    setValue(val);
-  };
+  // const handleSearch = () => {
+  //   console.log('value', value);
+  // };
 
   return (
     <Box p={4}>
@@ -87,14 +88,15 @@ export function HomePage(props) {
       {/* <FormattedMessage {...messages.header} /> */}
 
       <Typography variant="h5" paragraph align="center">
-        <b>HomePage</b>
+        <b>HomePage ({sizeData})</b>
       </Typography>
 
       <Grid item xs={12} sm={8} md={6} lg={5}>
         <TextField
-          value={value}
+          // value={value}
+          // defaultValue={value}
           // inputRef={e => console.log(e)}
-          onChange={() => hanldGetValue()}
+          onChange={e => hanldGetValue(e)}
           fullWidth
           size="small"
           variant="outlined"
@@ -102,7 +104,10 @@ export function HomePage(props) {
           InputProps={{
             endAdornment: (
               <InputAdornment position="start">
-                <IconButton size="small" onClick={() => handleSearch()}>
+                <IconButton
+                  size="small"
+                  onClick={() => triggerGetListBook(limit, 0, keySearch)}
+                >
                   <SearchIcon />
                 </IconButton>
               </InputAdornment>
@@ -168,7 +173,7 @@ export function HomePage(props) {
           display="flex"
           justifyContent="center"
           alignItems="center"
-          height="90vh"
+          height="70vh"
         >
           <CircularProgress />
         </Box>
