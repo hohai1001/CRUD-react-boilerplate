@@ -55,21 +55,27 @@ const homePageReducer = (state = initialState, action) =>
         draft.linkParams.sizeData = action.sizeData;
         const listData = [];
         if (!_isEmpty(action.data) && _size(action.data) > 0) {
-          _forEach(action.data, item => {
-            const no = _get(item, 'id', '');
+          _forEach(action.data, (item, index) => {
+            const no = index + 1;
             const title = _get(item, 'title', '');
             const body = _get(item, 'body', '');
             listData.push({ no, title, body });
           });
         }
-        draft.data = [...state.data, ...listData];
+
+        if (!_isEmpty(action.text)) {
+          draft.data = listData;
+        } else {
+          draft.data = [...state.data, ...listData];
+        }
         draft.statusFlags.isLoadMore = true;
+
         break;
       }
 
       case GET_LIST_BOOK_FAIL:
         draft.statusFlags.isGetListFail = true;
-        draft.statusFlags.isLoadMore = false;
+        draft.statusFlags.isLoadMore = true;
         draft.linkParams.offset = initialState.linkParams.offset;
         break;
     }

@@ -23,11 +23,6 @@ function checkStatus(response) {
   if (response.status === 200) {
     return response;
   }
-  // else if (response.status === 500) {
-  //   return 0;
-  // } else if (response.status === 2004) {
-  //   return 0;
-  // }
 
   const error = new Error(response.statusText);
   error.response = response;
@@ -42,7 +37,7 @@ function checkStatus(response) {
  *
  * @return {object}           The response data
  */
-export default function request(url, options) {
+export default function requestGet(url, options) {
   return fetch(url, options)
     .then(checkStatus)
     .then(parseJSON);
