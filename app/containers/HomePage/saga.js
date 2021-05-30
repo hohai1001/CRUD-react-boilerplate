@@ -1,8 +1,9 @@
 import { takeLatest, call, put } from 'redux-saga/effects';
-import request from 'utils/request';
+import requestGet from 'utils/request';
 import _slice from 'lodash/slice';
 import _get from 'lodash/get';
-// import _filter from 'lodash/filter';
+import _filter from 'lodash/filter';
+import _isEmpty from 'lodash/isEmpty';
 // import _forEach from 'lodash/forEach';
 // import _includes from 'lodash/includes';
 import { GET_LIST_BOOK_URL } from 'constants/routesApi';
@@ -21,25 +22,23 @@ function* GetListBook(action) {
   try {
     const limit = _get(action, 'limit', 15);
     const offset = _get(action, 'offset', 0);
-    // const keySearch = _get(action, 'text', '');
+    const keySearch = _get(action, 'text', '');
 
     // const data = yield call(getDataFake);
-    const data = yield call(request, GET_LIST_BOOK_URL);
+    const data = yield call(requestGet, GET_LIST_BOOK_URL);
 
     const sizeData = data.length;
 
-    // const newData = [];
-    // _forEach(data, (item, index) => {
-    //   // console.log('boolean', _includes(data[index].title, keySearch));
+    let result = [];
+    if (!_isEmpty(keySearch)) {
+      result = _filter(data, { title: keySearch });
+    } else {
+      result = _slice(data, offset, limit + offset);
+    }
 
-    //   const resultSearch = _filter(item, { title: keySearch });
-    //   console.log('resultSearch', resultSearch);
-    //   return newData;
-    // });
+    // const result = _slice(data, offset, limit + offset);
 
-    const result = _slice(data, offset, limit + offset);
-
-    yield put(getListBookSuccess(result, sizeData));
+    yield put(getListBookSuccess(result, sizeData, keySearch));
   } catch (err) {
     yield put(getListBookFail());
   }

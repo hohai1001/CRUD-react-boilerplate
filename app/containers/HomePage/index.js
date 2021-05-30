@@ -31,6 +31,8 @@ import SearchIcon from '@material-ui/icons/Search';
 import makeStyles from '@material-ui/core/styles/makeStyles';
 
 import _map from 'lodash/map';
+import _isEmpty from 'lodash/isEmpty';
+import _size from 'lodash/size';
 // import _filter from 'lodash/filter';
 
 import { useInjectSaga } from 'utils/injectSaga';
@@ -58,7 +60,13 @@ export function HomePage(props) {
   const classes = useStyles();
   const {
     data,
-    statusFlags: { isLoadMore, isShowLoadMore, isCallApi, isLoading },
+    statusFlags: {
+      isLoadMore,
+      isShowLoadMore,
+      isCallApi,
+      isLoading,
+      isGetListFail,
+    },
     linkParams: { limit, offset, sizeData },
     triggerGetListBook,
   } = props;
@@ -67,7 +75,7 @@ export function HomePage(props) {
     if (!isCallApi) {
       triggerGetListBook(limit, offset);
     }
-  }, [isCallApi]);
+  }, [isCallApi, _size(data)]);
 
   const [keySearch, setKeySearch] = React.useState('');
 
@@ -75,9 +83,18 @@ export function HomePage(props) {
     setKeySearch(event.target.value);
   };
 
+  const handleOnKeyDown = e => {
+    if (e.keyCode === 13) {
+      // setKeySearch(e.target.value);
+      triggerGetListBook(limit, 0, keySearch);
+    }
+  };
+
   // const handleSearch = () => {
   //   console.log('value', value);
   // };
+
+  // console.log('data', data);
 
   return (
     <Box p={4}>
@@ -96,6 +113,7 @@ export function HomePage(props) {
           // value={value}
           // defaultValue={value}
           // inputRef={e => console.log(e)}
+          onKeyDown={e => handleOnKeyDown(e)}
           onChange={e => hanldGetValue(e)}
           fullWidth
           size="small"
@@ -118,54 +136,64 @@ export function HomePage(props) {
       <br />
       {isLoadMore ? (
         <>
-          <TableContainer component={Paper}>
-            <Table size="small">
-              <TableHead className={classes.header}>
-                <TableRow>
-                  <TableCell width="5%">
-                    <b>NO</b>
-                  </TableCell>
-                  <TableCell width="30%">
-                    <b>Title</b>
-                  </TableCell>
-                  <TableCell width="65%">
-                    <b>Body</b>
-                  </TableCell>
-                </TableRow>
-              </TableHead>
-              <TableBody>
-                {_map(data, (item, idx) => (
-                  <TableRow key={idx.toString()}>
-                    <TableCell width="5%">{item.no}</TableCell>
-                    <TableCell width="30%">{item.title}</TableCell>
-                    <TableCell width="65%">{item.body}</TableCell>
-                  </TableRow>
-                ))}
-              </TableBody>
-            </Table>
-          </TableContainer>
-          {isShowLoadMore ? (
-            <Box my={3} textAlign="center">
-              <Button
-                color="secondary"
-                disabled={isLoading}
-                size="small"
-                variant="contained"
-                onClick={() => triggerGetListBook(limit, offset)}
-              >
-                {isLoading && (
-                  <>
-                    <CircularProgress
-                      style={{ width: '17px', height: '17px' }}
-                    />
-                    &nbsp;
-                  </>
-                )}
-                Xem thêm
-              </Button>
-            </Box>
+          {!_isEmpty(data) && !isGetListFail ? (
+            <>
+              <TableContainer component={Paper}>
+                <Table size="small">
+                  <TableHead className={classes.header}>
+                    <TableRow>
+                      <TableCell width="5%">
+                        <b>NO</b>
+                      </TableCell>
+                      <TableCell width="30%">
+                        <b>Title</b>
+                      </TableCell>
+                      <TableCell width="65%">
+                        <b>Body</b>
+                      </TableCell>
+                    </TableRow>
+                  </TableHead>
+                  <TableBody>
+                    {_map(data, (item, idx) => (
+                      <TableRow key={idx.toString()}>
+                        <TableCell width="5%">{item.no}</TableCell>
+                        <TableCell width="30%">{item.title}</TableCell>
+                        <TableCell width="65%">{item.body}</TableCell>
+                      </TableRow>
+                    ))}
+                  </TableBody>
+                </Table>
+              </TableContainer>
+              {isShowLoadMore ? (
+                <Box my={3} textAlign="center">
+                  <Button
+                    color="secondary"
+                    disabled={isLoading}
+                    size="small"
+                    variant="contained"
+                    onClick={() => triggerGetListBook(limit, offset)}
+                  >
+                    {isLoading && (
+                      <>
+                        <CircularProgress
+                          style={{ width: '17px', height: '17px' }}
+                        />
+                        &nbsp;
+                      </>
+                    )}
+                    Xem thêm
+                  </Button>
+                </Box>
+              ) : (
+                ''
+              )}
+            </>
           ) : (
-            ''
+            <Box pt={10}>
+              <Typography variant="h6" align="center">
+                không có dữ liệu !
+              </Typography>
+            </Box>
           )}
         </>
       ) : (
