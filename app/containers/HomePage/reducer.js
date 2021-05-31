@@ -9,15 +9,15 @@ import _isEmpty from 'lodash/isEmpty';
 // import _forEach from 'lodash/forEach';
 // import _get from 'lodash/get';
 import {
-  GET_LIST_BOOK,
-  GET_LIST_BOOK_SUCCESS,
-  GET_LIST_BOOK_FAIL,
+  GET_LIST_PRODUCTS,
+  GET_LIST_PRODUCTS_SUCCESS,
+  GET_LIST_PRODUCTS_FAIL,
 } from './constants';
 
 export const initialState = {
   data: [],
   linkParams: {
-    limit: 15,
+    limit: 8,
     offset: 0,
     keySearch: '',
     sizeData: 0,
@@ -35,7 +35,7 @@ export const initialState = {
 const homePageReducer = (state = initialState, action) =>
   produce(state, draft => {
     switch (action.type) {
-      case GET_LIST_BOOK:
+      case GET_LIST_PRODUCTS:
         draft.statusFlags.isLoading = true;
         draft.statusFlags.isCallApi = true;
         if (action.offset === 0) {
@@ -43,14 +43,23 @@ const homePageReducer = (state = initialState, action) =>
         }
         break;
 
-      case GET_LIST_BOOK_SUCCESS:
+      case GET_LIST_PRODUCTS_SUCCESS:
         draft.statusFlags.isLoading = false;
+        draft.linkParams.sizeData = action.sizeData;
+
+        draft.statusFlags.isShowLoadMore =
+          _size(action.data) >= state.linkParams.limit;
+        draft.linkParams.offset =
+          _size(action.data) > 0
+            ? state.linkParams.offset + _size(action.data)
+            : 0;
+
         if (!_isEmpty(action.data) && _size(action.data) > 0) {
-          draft.data = action.data;
+          draft.data = [...state.data, ...action.data];
         }
         break;
 
-      case GET_LIST_BOOK_FAIL:
+      case GET_LIST_PRODUCTS_FAIL:
         draft.statusFlags.isGetListFail = true;
         draft.statusFlags.isLoadMore = true;
         draft.linkParams.offset = initialState.linkParams.offset;
