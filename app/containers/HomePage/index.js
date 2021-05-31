@@ -12,26 +12,33 @@ import { Helmet } from 'react-helmet';
 import { createStructuredSelector } from 'reselect';
 import { compose } from 'redux';
 
-import Table from '@material-ui/core/Table';
-import TableContainer from '@material-ui/core/TableContainer';
-import TableHead from '@material-ui/core/TableHead';
-import TableRow from '@material-ui/core/TableRow';
-import TableBody from '@material-ui/core/TableBody';
-import TableCell from '@material-ui/core/TableCell';
-import Paper from '@material-ui/core/Paper';
+// import Table from '@material-ui/core/Table';
+// import TableContainer from '@material-ui/core/TableContainer';
+// import TableHead from '@material-ui/core/TableHead';
+// import TableRow from '@material-ui/core/TableRow';
+// import TableBody from '@material-ui/core/TableBody';
+// import TableCell from '@material-ui/core/TableCell';
+// import Paper from '@material-ui/core/Paper';
 import Box from '@material-ui/core/Box';
 import Typography from '@material-ui/core/Typography';
 import Button from '@material-ui/core/Button';
 import Grid from '@material-ui/core/Grid';
-import TextField from '@material-ui/core/TextField';
-import CircularProgress from '@material-ui/core/CircularProgress';
-import InputAdornment from '@material-ui/core/InputAdornment';
-import IconButton from '@material-ui/core/IconButton';
-import SearchIcon from '@material-ui/icons/Search';
+// import TextField from '@material-ui/core/TextField';
+// import CircularProgress from '@material-ui/core/CircularProgress';
+// import InputAdornment from '@material-ui/core/InputAdornment';
+// import IconButton from '@material-ui/core/IconButton';
+// import SearchIcon from '@material-ui/icons/Search';
 import makeStyles from '@material-ui/core/styles/makeStyles';
+import {
+  Card,
+  CardActions,
+  CardContent,
+  CardMedia,
+  withStyles,
+} from '@material-ui/core';
 
-import _map from 'lodash/map';
-import _isEmpty from 'lodash/isEmpty';
+// import _map from 'lodash/map';
+// import _isEmpty from 'lodash/isEmpty';
 import _size from 'lodash/size';
 // import _filter from 'lodash/filter';
 
@@ -51,7 +58,28 @@ const useStyles = makeStyles(theme => ({
   header: {
     backgroundColor: theme.palette.grey[300],
   },
+  media: {
+    // height: 0,
+    // paddingTop: 'calc(100% * 9 / 16)',
+    // cursor: 'pointer',
+    // height: 0,
+    // paddingTop: '100%',
+    // cursor: 'pointer',
+    maxWidth: '50%',
+    height: '400px',
+  },
 }));
+
+const CardFullHeight = withStyles(
+  () => ({
+    root: {
+      height: '100%',
+      wordBreak: 'break-word',
+    },
+  }),
+  { name: 'CardFullHeight' },
+)(Card);
+// export default CardFullHeight;
 
 export function HomePage(props) {
   useInjectReducer({ key: 'homePage', reducer });
@@ -61,11 +89,11 @@ export function HomePage(props) {
   const {
     data,
     statusFlags: {
-      isLoadMore,
-      isShowLoadMore,
+      // isLoadMore,
+      // isShowLoadMore,
       isCallApi,
-      isLoading,
-      isGetListFail,
+      // isLoading,
+      // isGetListFail,
     },
     linkParams: { limit, offset, sizeData },
     triggerGetListBook,
@@ -77,18 +105,18 @@ export function HomePage(props) {
     }
   }, [isCallApi, _size(data)]);
 
-  const [keySearch, setKeySearch] = React.useState('');
+  // const [keySearch, setKeySearch] = React.useState('');
 
-  const hanldGetValue = event => {
-    setKeySearch(event.target.value);
-  };
+  // const hanldGetValue = event => {
+  //   setKeySearch(event.target.value);
+  // };
 
-  const handleOnKeyDown = e => {
-    if (e.keyCode === 13) {
-      // setKeySearch(e.target.value);
-      triggerGetListBook(limit, 0, keySearch);
-    }
-  };
+  // const handleOnKeyDown = e => {
+  //   if (e.keyCode === 13) {
+  //     // setKeySearch(e.target.value);
+  //     triggerGetListBook(limit, 0, keySearch);
+  //   }
+  // };
 
   // const handleSearch = () => {
   //   console.log('value', value);
@@ -97,18 +125,60 @@ export function HomePage(props) {
   // console.log('data', data);
 
   return (
-    <Box p={4}>
+    <Box p={3}>
       <Helmet>
         <title>HomePage</title>
         <meta name="description" content="Description of HomePage" />
       </Helmet>
       {/* <FormattedMessage {...messages.header} /> */}
-
       <Typography variant="h5" paragraph align="center">
-        <b>HomePage ({sizeData})</b>
+        <b>All Products ({sizeData})</b>
       </Typography>
+      <Grid container spacing={3}>
+        {data.map(item => (
+          <Grid item xs={12} sm={6} md={4} lg={3} key={item.id}>
+            <CardFullHeight>
+              <CardMedia
+                // component="img"
+                // alt={item.title}
+                className={classes.media}
+                image={item.image}
+              />
 
-      <Grid item xs={12} sm={8} md={6} lg={5}>
+              {/* <img src={item.image} alt="item.title" maxWidth="100px" /> */}
+              <CardContent>
+                <Typography gutterBottom variant="h5" component="h2">
+                  {item.title}
+                </Typography>
+                <Typography component="label">
+                  price:{' '}
+                  <Typography color="error" component="span">
+                    <b>{item.price}</b>
+                  </Typography>
+                </Typography>
+                <Typography>AvailableSizes: {item.availableSizes}</Typography>
+                <Typography color="textSecondary" variant="subtitle2">
+                  Description: {item.description}
+                </Typography>
+              </CardContent>
+              <CardActions>
+                <Button size="small" color="primary">
+                  Share
+                </Button>
+                <Button size="small" color="primary">
+                  Learn More
+                </Button>
+              </CardActions>
+            </CardFullHeight>
+          </Grid>
+        ))}
+      </Grid>
+
+      {/* <Typography variant="h5" paragraph align="center">
+        <b>HomePage ({sizeData})</b>
+      </Typography> */}
+
+      {/* <Grid item xs={12} sm={8} md={6} lg={5}>
         <TextField
           // value={value}
           // defaultValue={value}
@@ -132,8 +202,8 @@ export function HomePage(props) {
             ),
           }}
         />
-      </Grid>
-      <br />
+      </Grid> */}
+      {/* <br />
       {isLoadMore ? (
         <>
           {!_isEmpty(data) && !isGetListFail ? (
@@ -205,8 +275,7 @@ export function HomePage(props) {
         >
           <CircularProgress />
         </Box>
-      )}
-      <br />
+      )} */}
     </Box>
   );
 }
