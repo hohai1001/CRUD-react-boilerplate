@@ -77,13 +77,14 @@ export default function Products(props) {
                     {item.description}
                   </Typography>
                   <Box my={1}>
-                    {sizes.map((i, idx) => (
-                      <Chip
-                        key={idx.toString()}
-                        className={classes.chip}
-                        label={i}
-                      />
-                    ))}
+                    {Array.isArray(sizes) &&
+                      sizes.map((i, idx) => (
+                        <Chip
+                          key={idx.toString()}
+                          className={classes.chip}
+                          label={i}
+                        />
+                      ))}
                   </Box>
                   <Typography color="error">
                     <b>{item.price} ($)</b>

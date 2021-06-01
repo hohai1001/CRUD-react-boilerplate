@@ -1,5 +1,8 @@
 import { takeLatest, call, put } from 'redux-saga/effects';
-import requestGet from 'utils/request';
+import {
+  requestGet,
+  // requestPost
+} from 'utils/request';
 import _slice from 'lodash/slice';
 import _get from 'lodash/get';
 import _size from 'lodash/size';
@@ -24,22 +27,18 @@ function* GetListBook(action) {
 
     // // const data = yield call(getDataFake);
 
-    fetch('https://60608ef404b05d0017ba2b0c.mockapi.io/api/products', {
-      method: 'POST',
-      body: JSON.stringify({
-        title: 'foo',
-        body: 'bar',
-        userId: 1,
-      }),
-      headers: {
-        'Content-type': 'application/json; charset=UTF-8',
-      },
-    })
-      .then(response => response.json())
-      .then(json => console.log(json));
-
     const products = yield call(requestGet, GET_LIST_PRODUCT_URL);
     const sizeProducts = _size(products);
+
+    // requestPost(GET_LIST_PRODUCT_URL, {
+    //   image:
+    //     'https://www.amazon.com/Avidlove-Nightgown-Lingerie-Babydoll-Sleepwear/dp/B072NH3X2X/ref=sr_1_36?dchild=1&keywords=Party+Wear+Gown&qid=1622560349&sr=8-36',
+    //   title: 'ABC',
+    //   description:
+    //     'Avidlove Women Lingerie V Neck Nightwear Satin Sleepwear Lace Chemise Mini Teddy',
+    //   availableSizes: ['M', 'L'],
+    //   price: 199,
+    // });
 
     const result = _slice(products, offset, limit + offset);
 

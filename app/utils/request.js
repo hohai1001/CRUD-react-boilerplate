@@ -37,8 +37,18 @@ function checkStatus(response) {
  *
  * @return {object}           The response data
  */
-export default function requestGet(url, options) {
-  return fetch(url, options)
+export const requestGet = (url, options) =>
+  fetch(url, options)
     .then(checkStatus)
     .then(parseJSON);
-}
+
+export const requestPost = (url, options) =>
+  fetch(url, {
+    method: 'POST',
+    body: JSON.stringify(options),
+    headers: {
+      'Content-type': 'application/json; charset=UTF-8',
+    },
+  })
+    .then(checkStatus)
+    .then(parseJSON);
