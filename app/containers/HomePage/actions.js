@@ -5,32 +5,32 @@
  */
 
 import {
-  GET_LIST_BOOK,
-  GET_LIST_BOOK_SUCCESS,
-  GET_LIST_BOOK_FAIL,
+  GET_LIST_PRODUCTS,
+  GET_LIST_PRODUCTS_SUCCESS,
+  GET_LIST_PRODUCTS_FAIL,
 } from './constants';
 
-export function getListBook(limit, offset, text) {
+export function getListProduct(limit, offset, text) {
   return {
-    type: GET_LIST_BOOK,
+    type: GET_LIST_PRODUCTS,
     limit,
     offset,
     text,
   };
 }
 
-export function getListBookSuccess(data, sizeData, text) {
+export function getListProductSuccess(data, sizeData, text) {
   return {
-    type: GET_LIST_BOOK_SUCCESS,
+    type: GET_LIST_PRODUCTS_SUCCESS,
     data,
     sizeData,
     text,
   };
 }
 
-export function getListBookFail(error) {
+export function getListProductFail(error) {
   return {
-    type: GET_LIST_BOOK_FAIL,
+    type: GET_LIST_PRODUCTS_FAIL,
     error,
   };
 }
