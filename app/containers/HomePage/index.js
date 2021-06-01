@@ -28,6 +28,7 @@ import Typography from '@material-ui/core/Typography';
 // import SearchIcon from '@material-ui/icons/Search';
 
 import Products from 'components/Products';
+import CommonStatus from 'components/commons/CommonStatus';
 
 // import _map from 'lodash/map';
 // import _isEmpty from 'lodash/isEmpty';
@@ -57,6 +58,8 @@ export function HomePage(props) {
       isShowLoadMore,
       isCallApi,
       isLoading,
+      isGetProductSuccess,
+      isGetListFail,
       // isGetListFail,
     },
     linkParams: { limit, offset, sizeData },
@@ -82,11 +85,18 @@ export function HomePage(props) {
         <b>All Products ({sizeData})</b>
       </Typography>
 
+      <CommonStatus
+        isLoading={isLoading}
+        isEmptyData={isGetListFail}
+        isShowLoadMore={isShowLoadMore}
+      />
+
       <Products
         data={data}
         isShowLoadMore={isShowLoadMore}
         isLoading={isLoading}
         getMoreProducts={() => triggerGetListProducts(limit, offset)}
+        isGetProductSuccess={isGetProductSuccess}
       />
     </Box>
   );

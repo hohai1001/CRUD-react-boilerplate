@@ -3,6 +3,7 @@ import requestGet from 'utils/request';
 import _slice from 'lodash/slice';
 import _get from 'lodash/get';
 import _size from 'lodash/size';
+import _isEmpty from 'lodash/isEmpty';
 import { GET_LIST_PRODUCT_URL } from 'constants/routesApi';
 // import { dataListBook } from 'constants/fakeData';
 import { GET_LIST_PRODUCTS } from './constants';
@@ -23,12 +24,30 @@ function* GetListBook(action) {
 
     // // const data = yield call(getDataFake);
 
+    fetch('https://60608ef404b05d0017ba2b0c.mockapi.io/api/products', {
+      method: 'POST',
+      body: JSON.stringify({
+        title: 'foo',
+        body: 'bar',
+        userId: 1,
+      }),
+      headers: {
+        'Content-type': 'application/json; charset=UTF-8',
+      },
+    })
+      .then(response => response.json())
+      .then(json => console.log(json));
+
     const products = yield call(requestGet, GET_LIST_PRODUCT_URL);
     const sizeProducts = _size(products);
 
     const result = _slice(products, offset, limit + offset);
 
-    yield put(getListProductSuccess(result, sizeProducts));
+    if (!_isEmpty(result)) {
+      yield put(getListProductSuccess(result, sizeProducts));
+    } else {
+      yield put(getListProductFail());
+    }
 
     // const sizeData = data.length;
     // let result = [];
@@ -40,7 +59,7 @@ function* GetListBook(action) {
     // // const result = _slice(data, offset, limit + offset);
     // yield put(getListBookSuccess(result, sizeData, keySearch));
   } catch (err) {
-    yield put(getListProductFail());
+    yield put(getListProductFail(err));
   }
 }
 

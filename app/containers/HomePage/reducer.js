@@ -24,10 +24,10 @@ export const initialState = {
   },
   statusFlags: {
     isLoading: false,
-    isLoadMore: false,
     isShowLoadMore: false,
     isGetListFail: false,
     isCallApi: false,
+    isGetProductSuccess: false,
   },
 };
 
@@ -46,7 +46,6 @@ const homePageReducer = (state = initialState, action) =>
       case GET_LIST_PRODUCTS_SUCCESS:
         draft.statusFlags.isLoading = false;
         draft.linkParams.sizeData = action.sizeData;
-
         draft.statusFlags.isShowLoadMore =
           _size(action.data) >= state.linkParams.limit;
         draft.linkParams.offset =
@@ -55,13 +54,15 @@ const homePageReducer = (state = initialState, action) =>
             : 0;
 
         if (!_isEmpty(action.data) && _size(action.data) > 0) {
+          draft.statusFlags.isGetProductSuccess = true;
           draft.data = [...state.data, ...action.data];
         }
         break;
 
       case GET_LIST_PRODUCTS_FAIL:
         draft.statusFlags.isGetListFail = true;
-        draft.statusFlags.isLoadMore = true;
+        draft.statusFlags.isLoading = false;
+        draft.statusFlags.isGetProductSuccess = false;
         draft.linkParams.offset = initialState.linkParams.offset;
         break;
     }
