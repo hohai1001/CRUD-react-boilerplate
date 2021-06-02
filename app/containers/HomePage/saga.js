@@ -36,7 +36,7 @@ function* GetListBook(action) {
     //   title: 'ABC',
     //   description:
     //     'Avidlove Women Lingerie V Neck Nightwear Satin Sleepwear Lace Chemise Mini Teddy',
-    //   availableSizes: ['M', 'L'],
+    //   availableSizes: 'm,l,xxl',
     //   price: 199,
     // });
 
