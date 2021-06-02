@@ -13,6 +13,10 @@ import Chip from '@material-ui/core/Chip';
 import makeStyles from '@material-ui/core/styles/makeStyles';
 import withStyles from '@material-ui/core/styles/withStyles';
 
+import _map from 'lodash/map';
+import _get from 'lodash/get';
+import _split from 'lodash/split';
+
 const useStyles = makeStyles({
   media: {
     textAlign: 'center',
@@ -26,6 +30,9 @@ const useStyles = makeStyles({
     display: '-webkit-box',
     '-webkit-box-orient': 'vertical',
     '-webkit-line-clamp': 1,
+  },
+  upperCase: {
+    textTransform: 'uppercase',
   },
 });
 
@@ -51,57 +58,60 @@ export default function Products(props) {
   return (
     isGetProductSuccess && (
       <Grid container spacing={3}>
-        {data.map(item => {
-          const sizes = item.availableSizes;
-          return (
-            <Grid item xs={12} sm={6} md={4} lg={3} key={item.id}>
-              <CardFullHeight>
-                <CardMedia className={classes.media}>
-                  <img src={item.image} alt={item.title} />
-                </CardMedia>
-                <CardContent className={classes.media}>
-                  <Typography
-                    gutterBottom
-                    variant="h5"
-                    component="h2"
-                    className={classes.lineClamp}
-                  >
-                    {item.title}
-                  </Typography>
-                  <Typography
-                    color="textSecondary"
-                    variant="subtitle2"
-                    className={classes.lineClamp}
-                    gutterBottom
-                  >
-                    {item.description}
-                  </Typography>
-                  <Box my={1}>
-                    {Array.isArray(sizes) &&
-                      sizes.map((i, idx) => (
-                        <Chip
-                          key={idx.toString()}
-                          className={classes.chip}
-                          label={i}
-                        />
-                      ))}
-                  </Box>
-                  <Typography color="error">
-                    <b>{item.price} ($)</b>
-                  </Typography>
-                </CardContent>
-                <CardActions>
-                  <Button size="small" color="primary">
-                    Share
-                  </Button>
-                  <Button size="small" color="primary">
-                    Learn More
-                  </Button>
-                </CardActions>
-              </CardFullHeight>
-            </Grid>
-          );
-        })}
+        {data.map(item => (
+          <Grid item xs={12} sm={6} md={4} lg={3} key={item.id}>
+            <CardFullHeight>
+              <CardMedia className={classes.media}>
+                <img src={_get(item, 'image')} alt={item.title} />
+              </CardMedia>
+              <CardContent className={classes.media}>
+                <Typography
+                  gutterBottom
+                  variant="h5"
+                  component="h2"
+                  className={classes.lineClamp}
+                >
+                  {_get(item, 'title')}
+                </Typography>
+                <Typography
+                  color="textSecondary"
+                  variant="subtitle2"
+                  className={classes.lineClamp}
+                  gutterBottom
+                >
+                  {_get(item, 'description')}
+                </Typography>
+                <Box my={1}>
+                  {_map(
+                    _split(_get(item, 'availableSizes', []), ','),
+                    (i, idx) => (
+                      <Chip
+                        key={idx.toString()}
+                        className={classes.chip}
+                        label={
+                          <Typography className={classes.upperCase}>
+                            {i}
+                          </Typography>
+                        }
+                      />
+                    ),
+                  )}
+                </Box>
+                <Typography color="error">
+                  <b>{_get(item, 'price')} ($)</b>
+                </Typography>
+              </CardContent>
+              <CardActions>
+                <Button size="small" color="primary">
+                  Share
+                </Button>
+                <Button size="small" color="primary">
+                  Learn More
+                </Button>
+              </CardActions>
+            </CardFullHeight>
+          </Grid>
+        ))}
         {isShowLoadMore && (
           <Grid item xs={12}>
             <Box textAlign="center">
