@@ -12,6 +12,7 @@ import CircularProgress from '@material-ui/core/CircularProgress';
 import Chip from '@material-ui/core/Chip';
 import makeStyles from '@material-ui/core/styles/makeStyles';
 import withStyles from '@material-ui/core/styles/withStyles';
+import { Link as RouterLink } from 'react-router-dom';
 
 import _map from 'lodash/map';
 import _get from 'lodash/get';
@@ -55,6 +56,10 @@ export default function Products(props) {
     isGetProductSuccess,
   } = props;
   const classes = useStyles();
+
+  // const path = window.location.origin;
+  // console.log('path', path);
+
   return (
     isGetProductSuccess && (
       <Grid container spacing={3}>
@@ -105,7 +110,13 @@ export default function Products(props) {
                 <Button size="small" color="primary">
                   Share
                 </Button>
-                <Button size="small" color="primary">
+                <Button
+                  size="small"
+                  color="primary"
+                  component={RouterLink}
+                  to="/aaa"
+                  // target="_blank"
+                >
                   Learn More
                 </Button>
               </CardActions>

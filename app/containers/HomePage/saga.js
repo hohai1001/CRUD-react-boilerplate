@@ -1,23 +1,22 @@
 import { takeLatest, call, put } from 'redux-saga/effects';
-import {
-  requestGet,
-  // requestPost
-} from 'utils/request';
+import // requestGet,
+// requestPost
+'utils/request';
 import _slice from 'lodash/slice';
 import _get from 'lodash/get';
 import _size from 'lodash/size';
 import _isEmpty from 'lodash/isEmpty';
-import { GET_LIST_PRODUCT_URL } from 'constants/routesApi';
-// import { dataListBook } from 'constants/fakeData';
+// import { GET_LIST_PRODUCT_URL } from 'constants/routesApi';
+import { fakeData } from 'constants/fakeData';
 import { GET_LIST_PRODUCTS } from './constants';
 import { getListProductSuccess, getListProductFail } from './actions';
 
-// const getDataFake = () =>
-//   new Promise(resolve => {
-//     setTimeout(() => {
-//       resolve(dataListBook);
-//     }, 1000);
-//   });
+const getDataFake = () =>
+  new Promise(resolve => {
+    setTimeout(() => {
+      resolve(fakeData);
+    }, 1000);
+  });
 
 function* GetListBook(action) {
   try {
@@ -27,7 +26,9 @@ function* GetListBook(action) {
 
     // // const data = yield call(getDataFake);
 
-    const products = yield call(requestGet, GET_LIST_PRODUCT_URL);
+    const products = yield call(getDataFake);
+
+    // const products = yield call(requestGet, GET_LIST_PRODUCT_URL);
     const sizeProducts = _size(products);
 
     // requestPost(GET_LIST_PRODUCT_URL, {
