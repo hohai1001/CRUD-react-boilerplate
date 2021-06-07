@@ -5,7 +5,7 @@
  */
 import produce from 'immer';
 import _size from 'lodash/size';
-import _isEmpty from 'lodash/isEmpty';
+// import _isEmpty from 'lodash/isEmpty';
 // import _forEach from 'lodash/forEach';
 // import _get from 'lodash/get';
 import {
@@ -53,7 +53,7 @@ const homePageReducer = (state = initialState, action) =>
             ? state.linkParams.offset + _size(action.data)
             : 0;
 
-        if (!_isEmpty(action.data) && _size(action.data) > 0) {
+        if (_size(action.data) > 0) {
           draft.statusFlags.isGetProductSuccess = true;
           draft.data = [...state.data, ...action.data];
         }
