@@ -8,11 +8,15 @@ import CardContent from '@material-ui/core/CardContent';
 import CardMedia from '@material-ui/core/CardMedia';
 import CardActions from '@material-ui/core/CardActions';
 import Card from '@material-ui/core/Card';
+import TextField from '@material-ui/core/TextField';
 import CircularProgress from '@material-ui/core/CircularProgress';
 import Chip from '@material-ui/core/Chip';
 import makeStyles from '@material-ui/core/styles/makeStyles';
 import withStyles from '@material-ui/core/styles/withStyles';
 import { Link as RouterLink } from 'react-router-dom';
+import SearchIcon from '@material-ui/icons/Search';
+import InputAdornment from '@material-ui/core/InputAdornment';
+import IconButton from '@material-ui/core/IconButton';
 
 import _map from 'lodash/map';
 import _get from 'lodash/get';
@@ -63,6 +67,23 @@ export default function Products(props) {
   return (
     isGetProductSuccess && (
       <Grid container spacing={3}>
+        <Grid item xs={12}>
+          <TextField
+            placeholder="...Search"
+            variant="outlined"
+            fullWidth
+            size="small"
+            InputProps={{
+              endAdornment: (
+                <InputAdornment position="end">
+                  <IconButton>
+                    <SearchIcon />
+                  </IconButton>
+                </InputAdornment>
+              ),
+            }}
+          />
+        </Grid>
         {data.map(item => (
           <Grid item xs={12} sm={6} md={4} lg={3} key={item.id}>
             <CardFullHeight>

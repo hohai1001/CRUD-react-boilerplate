@@ -19,12 +19,10 @@ export function getListProduct(limit, offset, text) {
   };
 }
 
-export function getListProductSuccess(data, sizeData, text) {
+export function getListProductSuccess(data) {
   return {
     type: GET_LIST_PRODUCTS_SUCCESS,
     data,
-    sizeData,
-    text,
   };
 }
 

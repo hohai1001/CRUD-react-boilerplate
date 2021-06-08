@@ -5,9 +5,7 @@
  */
 import produce from 'immer';
 import _size from 'lodash/size';
-// import _isEmpty from 'lodash/isEmpty';
-// import _forEach from 'lodash/forEach';
-// import _get from 'lodash/get';
+import _get from 'lodash/get';
 import {
   GET_LIST_PRODUCTS,
   GET_LIST_PRODUCTS_SUCCESS,
@@ -43,21 +41,22 @@ const homePageReducer = (state = initialState, action) =>
         }
         break;
 
-      case GET_LIST_PRODUCTS_SUCCESS:
+      case GET_LIST_PRODUCTS_SUCCESS: {
+        const data = _get(action.data, 'data', []);
+        const sizeData = _get(action.data, 'sizes', 0);
         draft.statusFlags.isLoading = false;
-        draft.linkParams.sizeData = action.sizeData;
+        draft.linkParams.sizeData = sizeData;
         draft.statusFlags.isShowLoadMore =
-          _size(action.data) >= state.linkParams.limit;
+          _size(data) >= state.linkParams.limit;
         draft.linkParams.offset =
-          _size(action.data) > 0
-            ? state.linkParams.offset + _size(action.data)
-            : 0;
+          _size(data) > 0 ? state.linkParams.offset + _size(data) : 0;
 
-        if (_size(action.data) > 0) {
+        if (_size(data) > 0) {
           draft.statusFlags.isGetProductSuccess = true;
-          draft.data = [...state.data, ...action.data];
+          draft.data = [...state.data, ...data];
         }
         break;
+      }
 
       case GET_LIST_PRODUCTS_FAIL:
         draft.statusFlags.isGetListFail = true;
@@ -69,33 +68,3 @@ const homePageReducer = (state = initialState, action) =>
   });
 
 export default homePageReducer;
-// case GET_LIST_BOOK_SUCCESS: {
-//   draft.statusFlags.isLoading = false;
-//   draft.statusFlags.isShowLoadMore =
-//     _size(action.data) >= state.linkParams.limit;
-
-//   draft.linkParams.offset =
-//     _size(action.data) > 0
-//       ? state.linkParams.offset + _size(action.data)
-//       : 0;
-
-//   draft.linkParams.sizeData = action.sizeData;
-//   const listData = [];
-//   if (!_isEmpty(action.data) && _size(action.data) > 0) {
-//     _forEach(action.data, (item, index) => {
-//       const no = index + 1;
-//       const title = _get(item, 'title', '');
-//       const body = _get(item, 'body', '');
-//       listData.push({ no, title, body });
-//     });
-//   }
-
-//   if (!_isEmpty(action.text)) {
-//     draft.data = listData;
-//   } else {
-//     draft.data = [...state.data, ...listData];
-//   }
-//   draft.statusFlags.isLoadMore = true;
-
-//   break;
-// }
